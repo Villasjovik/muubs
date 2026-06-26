@@ -1261,12 +1261,23 @@ position:relative;overflow:hidden;transition:color .35s}
             <span class="pkg-boost-switch" aria-hidden="true"></span>
             <span class="pkg-boost-text">
               <span class="pkg-boost-tag">Optional &middot; <em>Recommended</em></span>
-              <span class="pkg-boost-title">Add a Meta reach boost <span class="pkg-boost-price" data-bt-price="start">+1,000&nbsp;EUR</span></span>
+              <span class="pkg-boost-title">Add a Meta reach boost <span class="pkg-boost-price" data-bt-price="start">+€1,000</span></span>
             </span>
           </button>
           <div class="pkg-boost-body" id="pkg-boost-body-start" aria-hidden="true">
             <div class="pkg-boost-body-inner">
-              <p class="pkg-boost-desc" data-pkg-desc="start"><strong class="pkg-boost-stat" data-bt-stat="start">100,000</strong> guaranteed extra views. A &euro;1,000 Meta Ads budget puts a clickable link straight ON the film inside Instagram and Facebook &mdash; a seamless hand-off that sends the traffic directly to your shop.</p>
+              <p class="pkg-boost-desc" data-pkg-desc="start">Over <strong class="pkg-boost-stat" data-bt-stat="start">100,000</strong> guaranteed extra views. A Meta Ads budget puts a clickable link straight ON the film inside Instagram and Facebook &mdash; a seamless hand-off that sends the traffic directly to your shop.</p>
+              <p class="pkg-boost-desc-zero" data-pkg-desc-zero="start" hidden>Drag the slider to a budget below to see how many extra views the film delivers.</p>
+              <div class="pkg-slider">
+                <label class="pkg-slider-lbl" for="pk-range-start">Meta budget per production</label>
+                <input id="pk-range-start" class="pkg-range" type="range" min="0" max="3" step="1" value="2" data-pkg-slider="start" aria-label="Meta budget per production for the Single film"/>
+                <div class="pkg-ticks" aria-hidden="true">
+                  <span class="pkg-tick" data-pkg-tick="start" data-step="0">&euro;0</span>
+                  <span class="pkg-tick" data-pkg-tick="start" data-step="1">&euro;500</span>
+                  <span class="pkg-tick is-active" data-pkg-tick="start" data-step="2">&euro;1,000</span>
+                  <span class="pkg-tick" data-pkg-tick="start" data-step="3">&euro;2,000</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -1293,12 +1304,23 @@ position:relative;overflow:hidden;transition:color .35s}
             <span class="pkg-boost-switch" aria-hidden="true"></span>
             <span class="pkg-boost-text">
               <span class="pkg-boost-tag">Optional &middot; <em>Recommended</em></span>
-              <span class="pkg-boost-title">Add a Meta reach boost <span class="pkg-boost-price" data-bt-price="season">+1,000&nbsp;EUR</span></span>
+              <span class="pkg-boost-title">Add a Meta reach boost <span class="pkg-boost-price" data-bt-price="season">+€3,000</span></span>
             </span>
           </button>
           <div class="pkg-boost-body" id="pkg-boost-body-season" aria-hidden="true">
             <div class="pkg-boost-body-inner">
-              <p class="pkg-boost-desc" data-pkg-desc="season"><strong class="pkg-boost-stat" data-bt-stat="season">100,000</strong> guaranteed extra views. A &euro;1,000 Meta Ads budget puts a clickable link straight ON the films inside Instagram and Facebook &mdash; retargeting the people who already watched and sending the traffic directly to your shop.</p>
+              <p class="pkg-boost-desc" data-pkg-desc="season">All three films get the budget &mdash; over <strong class="pkg-boost-stat" data-bt-stat="season">300,000</strong> guaranteed extra views. A Meta Ads budget per film puts a clickable link straight ON each one inside Instagram and Facebook &mdash; retargeting the people who already watched and sending the traffic directly to your shop.</p>
+              <p class="pkg-boost-desc-zero" data-pkg-desc-zero="season" hidden>Drag the slider to a budget below to see how many extra views the series delivers.</p>
+              <div class="pkg-slider">
+                <label class="pkg-slider-lbl" for="pk-range-season">Meta budget per production</label>
+                <input id="pk-range-season" class="pkg-range" type="range" min="0" max="3" step="1" value="2" data-pkg-slider="season" aria-label="Meta budget per production for the Full series"/>
+                <div class="pkg-ticks" aria-hidden="true">
+                  <span class="pkg-tick" data-pkg-tick="season" data-step="0">&euro;0</span>
+                  <span class="pkg-tick" data-pkg-tick="season" data-step="1">&euro;500</span>
+                  <span class="pkg-tick is-active" data-pkg-tick="season" data-step="2">&euro;1,000</span>
+                  <span class="pkg-tick" data-pkg-tick="season" data-step="3">&euro;2,000</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -1307,8 +1329,8 @@ position:relative;overflow:hidden;transition:color .35s}
           <h3 class="price-title">Full series</h3>
           <p class="price-sub">3 brand films &middot; 6 stories with CTA &middot; 60 lifestyle images</p>
           <p class="price-total-lbl">Price</p>
-          <p class="price-orig" data-base="reg. 4,950 EUR" data-boost="reg. 5,950 EUR">reg. 4,950 EUR</p>
-          <p class="price-total" data-base="3500" data-boost="4500">3,500</p>
+          <p class="price-orig" data-base="reg. €4,950" data-boost="reg. €7,950">reg. €4,950</p>
+          <p class="price-total" data-base="3500" data-boost="6500">3,500</p>
           <span class="price-unit">EUR &middot; no VAT</span>
           <div class="price-includes">
             <p class="pi hi">3 brand films published on Villa Sjövik&apos;s channels</p>
@@ -1974,24 +1996,116 @@ if(spotSec){
   });
 })();
 
-/* === PER-PACKAGE PKG-BOOST (Meta reach boost per package — fixed +€1,000 add-on) === */
+/* === PER-CARD PKG-BOOST (Meta reach per package — EUR budget slider, ×mult per package) === */
 (function(){
-  // EUR thousands formatting: 1650 -> "1,650"
-  function fmtEur(n){return Math.round(n).toLocaleString('en-US')}
-  function animateNumber(el,from,to,duration){
+  const VIEWS_PER_EUR=100;
+
+  function fmt(n){return Math.round(n).toLocaleString('en-US')}
+  function fmtThin(n){return Math.round(n).toLocaleString('en-US')}
+  function animateNumber(el,from,to,duration,formatter){
+    const fmtFn=formatter||fmt;
     const start=performance.now();
     function tick(now){
       const t=Math.min((now-start)/duration,1);
       const eased=1-Math.pow(1-t,3);
-      el.textContent=fmtEur(from+(to-from)*eased);
+      el.textContent=fmtFn(from+(to-from)*eased);
       if(t<1)requestAnimationFrame(tick);
     }
     requestAnimationFrame(tick);
   }
 
-  // Click on .pkg-boost-head toggles the wrapper and swaps the package price
-  // between its EUR base and EUR boost (data-base / data-boost). Fixed add-on,
-  // no slider — the international EUR convention.
+  // Step values (EUR per production): 0, 500, 1,000, 2,000 — default 1,000 (step 2)
+  const STEP_VALUES=[0,500,1000,2000];
+  const cardBudget={start:1000, season:1000};
+  const PKG_MULT={start:1, season:3};
+
+  function stepFromBudget(b){
+    let idx=STEP_VALUES.indexOf(b);
+    if(idx>=0) return idx;
+    let best=0, bestDiff=Infinity;
+    for(let i=0;i<STEP_VALUES.length;i++){
+      const d=Math.abs(STEP_VALUES[i]-b);
+      if(d<bestDiff){bestDiff=d;best=i;}
+    }
+    return best;
+  }
+  function boostCostForCard(pkg){return cardBudget[pkg]*PKG_MULT[pkg];}
+  function viewsForCard(pkg){return cardBudget[pkg]*VIEWS_PER_EUR*PKG_MULT[pkg];}
+
+  function refreshCard(pkg,opts){
+    const col=document.querySelector('[data-pkg-col="'+pkg+'"]');
+    if(!col)return;
+    const box=col.querySelector('[data-pkg-box="'+pkg+'"]');
+    const total=box && box.querySelector('.price-total[data-base][data-boost]');
+    const orig=box && box.querySelector('.price-orig[data-base][data-boost]');
+    const priceLbl=col.querySelector('[data-bt-price="'+pkg+'"]');
+    const statLbl=col.querySelector('[data-bt-stat="'+pkg+'"]');
+    const btn=col.querySelector('.pkg-boost');
+    const slider=col.querySelector('[data-pkg-slider="'+pkg+'"]');
+    const ticks=col.querySelectorAll('[data-pkg-tick="'+pkg+'"]');
+    if(!total)return;
+
+    const isOn=btn && btn.getAttribute('aria-pressed')==='true';
+    const cost=boostCostForCard(pkg);
+
+    const base=+total.dataset.base;
+    const newBoost=base+cost;
+    total.dataset.boost=newBoost;
+    if(orig){
+      const origBaseNum=parseInt(orig.dataset.base.replace(/[^\d]/g,''),10);
+      const origBoostNum=origBaseNum+cost;
+      orig.dataset.boost='reg. €'+fmt(origBoostNum);
+    }
+
+    if(priceLbl){
+      if(cost===0){
+        priceLbl.innerHTML='+€0';
+        priceLbl.classList.add('is-zero');
+      }else{
+        priceLbl.innerHTML='+€'+fmtThin(cost);
+        priceLbl.classList.remove('is-zero');
+      }
+    }
+    const desc=col.querySelector('[data-pkg-desc="'+pkg+'"]');
+    const descZero=col.querySelector('[data-pkg-desc-zero="'+pkg+'"]');
+    const views=viewsForCard(pkg);
+    if(views===0){
+      if(desc) desc.hidden=true;
+      if(descZero) descZero.hidden=false;
+    }else{
+      if(desc) desc.hidden=false;
+      if(descZero) descZero.hidden=true;
+      if(statLbl) statLbl.innerHTML=fmtThin(views);
+    }
+
+    if(slider){
+      const step=stepFromBudget(cardBudget[pkg]);
+      if(!(opts&&opts.skipSlider)){slider.value=step;}
+      const pct=(step/3)*100;
+      slider.style.setProperty('--pk-fill',pct+'%');
+      ticks.forEach(t=>{t.classList.toggle('is-active', +t.dataset.step===step);});
+    }
+
+    if(isOn){
+      const currentDisplayed=parseInt(total.textContent.replace(/[^\d]/g,''),10);
+      const target=base+cost;
+      if(currentDisplayed!==target){
+        animateNumber(total,currentDisplayed,target,420);
+        total.classList.remove('boost-pulse');void total.offsetWidth;total.classList.add('boost-pulse');
+      }
+      if(orig){orig.textContent= cost===0 ? orig.dataset.base : orig.dataset.boost;}
+    }else{
+      if(total.textContent.replace(/[^\d]/g,'')!==String(base)){total.textContent=fmt(base);}
+      if(orig){orig.textContent=orig.dataset.base;}
+    }
+  }
+
+  function setCardBudget(pkg,eur,opts){
+    cardBudget[pkg]=eur;
+    refreshCard(pkg,opts);
+  }
+
+  // Wire toggles — click on .pkg-boost-head toggles the wrapper
   document.querySelectorAll('.pkg-boost-head').forEach(headBtn=>{
     const wrapper=headBtn.closest('.pkg-boost');
     if(!wrapper)return;
@@ -2020,8 +2134,37 @@ if(spotSec){
           orig.classList.remove('boost-pulse');void orig.offsetWidth;orig.classList.add('boost-pulse');
         }
       }
+      refreshCard(pkg);
     });
   });
+
+  // Wire per-card sliders
+  document.querySelectorAll('[data-pkg-slider]').forEach(slider=>{
+    const pkg=slider.dataset.pkgSlider;
+    slider.addEventListener('input',e=>{
+      const step=+e.target.value;
+      const eur=STEP_VALUES[step]||0;
+      setCardBudget(pkg,eur,{skipSlider:true});
+    });
+    slider.addEventListener('click',e=>e.stopPropagation());
+    slider.addEventListener('mousedown',e=>e.stopPropagation());
+    slider.addEventListener('touchstart',e=>e.stopPropagation(),{passive:true});
+    slider.addEventListener('keydown',e=>e.stopPropagation());
+  });
+
+  // Wire tick labels — clickable to jump to step
+  document.querySelectorAll('[data-pkg-tick]').forEach(tick=>{
+    tick.addEventListener('click',e=>{
+      e.stopPropagation();
+      const pkg=tick.dataset.pkgTick;
+      const step=+tick.dataset.step;
+      setCardBudget(pkg,STEP_VALUES[step]||0);
+    });
+  });
+
+  // Initial render
+  refreshCard('start');
+  refreshCard('season');
 })();
 
 /* META-RÄCKVIDD AUTO-AKTIVERING — Kampanjpaket (featured) togglar ON automatiskt
